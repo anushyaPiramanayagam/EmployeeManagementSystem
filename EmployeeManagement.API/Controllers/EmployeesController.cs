@@ -52,4 +52,36 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateEmployee(
+    int id,
+    UpdateEmployeeDto request)
+    {
+        var employee = await _employeeRepository.GetByIdAsync(id);
+
+        if (employee == null)
+            return NotFound();
+
+        employee.FirstName = request.FirstName;
+        employee.LastName = request.LastName;
+        employee.Email = request.Email;
+        employee.Designation = request.Designation;
+        employee.DepartmentId = request.DepartmentId;
+
+        await _employeeRepository.UpdateAsync(employee);
+
+        return Ok(employee);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEmployee(int id)
+    {
+        var employee = await _employeeRepository.GetByIdAsync(id);
+
+        if (employee == null)
+            return NotFound();
+
+        await _employeeRepository.DeleteAsync(id);
+
+        return NoContent();
+    }
 }

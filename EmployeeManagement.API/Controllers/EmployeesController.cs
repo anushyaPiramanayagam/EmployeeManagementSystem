@@ -1,5 +1,7 @@
 ﻿using EmployeeManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using EmployeeManagement.Application.DTOs;
+using EmployeeManagement.Domain.Entities;
 
 namespace EmployeeManagement.API.Controllers;
 
@@ -29,6 +31,24 @@ public class EmployeesController : ControllerBase
 
         if (employee == null)
             return NotFound();
+
+        return Ok(employee);
+    }
+    [HttpPost]
+    public async Task<IActionResult> CreateEmployee(
+    CreateEmployeeDto request)
+    {
+        var employee = new Employee
+        {
+            EmployeeCode = request.EmployeeCode,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            Designation = request.Designation,
+            DepartmentId = request.DepartmentId
+        };
+
+        await _employeeRepository.AddAsync(employee);
 
         return Ok(employee);
     }

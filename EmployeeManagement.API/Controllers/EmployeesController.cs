@@ -1,7 +1,8 @@
-﻿using EmployeeManagement.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using EmployeeManagement.Application.DTOs;
+﻿using EmployeeManagement.Application.DTOs;
+using EmployeeManagement.Application.Interfaces;
+using EmployeeManagement.Application.Services;
 using EmployeeManagement.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.API.Controllers;
 
@@ -9,17 +10,18 @@ namespace EmployeeManagement.API.Controllers;
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
 {
-    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IEmployeeService _employeeService;
 
-    public EmployeesController(IEmployeeRepository employeeRepository)
+    public EmployeesController(
+        IEmployeeService employeeService)
     {
-        _employeeRepository = employeeRepository;
+        _employeeService = employeeService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees()
     {
-        var employees = await _employeeRepository.GetAllAsync();
+        var employees = await _employeeService.GetAllAsync();
 
         return Ok(employees);
     }
@@ -27,60 +29,46 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeById(int id)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id);
+        var employee = await _employeeService.GetByIdAsync(id);
 
         if (employee == null)
             return NotFound();
 
         return Ok(employee);
     }
+
     [HttpPost]
     public async Task<IActionResult> CreateEmployee(
-    CreateEmployeeDto request)
+      CreateEmployeeDto request)
     {
-        var employee = new Employee
-        {
-            EmployeeCode = request.EmployeeCode,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Designation = request.Designation,
-            DepartmentId = request.DepartmentId
-        };
-
-        await _employeeRepository.AddAsync(employee);
+        var employee =
+            await _employeeService.CreateAsync(request);
 
         return Ok(employee);
     }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployee(
-    int id,
-    UpdateEmployeeDto request)
+     int id,
+     UpdateEmployeeDto request)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id);
+        var employee =
+            await _employeeService.UpdateAsync(id, request);
 
         if (employee == null)
             return NotFound();
 
-        employee.FirstName = request.FirstName;
-        employee.LastName = request.LastName;
-        employee.Email = request.Email;
-        employee.Designation = request.Designation;
-        employee.DepartmentId = request.DepartmentId;
-
-        await _employeeRepository.UpdateAsync(employee);
-
         return Ok(employee);
     }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployee(int id)
     {
-        var employee = await _employeeRepository.GetByIdAsync(id);
+        var deleted =
+            await _employeeService.DeleteAsync(id);
 
-        if (employee == null)
+        if (!deleted)
             return NotFound();
-
-        await _employeeRepository.DeleteAsync(id);
 
         return NoContent();
     }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EmployeeManagement.Application.Interfaces;
 using EmployeeManagement.Infrastructure.Repositories;
+using EmployeeManagement.Application.Services;
 
 namespace EmployeeManagement.Infrastructure.Configurations;
 
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
 
         return services;
     }

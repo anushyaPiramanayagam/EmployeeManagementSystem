@@ -1,5 +1,6 @@
 using EmployeeManagement.Infrastructure.Configurations;
 using EmployeeManagement.Application.Mappings;
+using EmployeeManagement.API.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -17,7 +18,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseGlobalExceptionHandling();
 app.MapControllers();
 
 app.Run();

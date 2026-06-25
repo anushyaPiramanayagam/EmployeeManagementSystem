@@ -38,8 +38,7 @@ public class ExceptionMiddleware
 
         var response = new
         {
-            Message =
-                "An unexpected error occurred."
+            Message = "An unexpected error occurred."
         };
 
         var json =

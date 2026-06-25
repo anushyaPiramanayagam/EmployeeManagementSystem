@@ -11,17 +11,21 @@ namespace EmployeeManagement.API.Controllers;
 public class EmployeesController : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
+    private readonly ILogger<EmployeesController> _logger;
+   public EmployeesController(
+    IEmployeeService employeeService,
+    ILogger<EmployeesController> logger)
+{
+    _employeeService =
+        employeeService;
 
-    public EmployeesController(
-        IEmployeeService employeeService)
-    {
-        _employeeService = employeeService;
-    }
+    _logger = logger;
+}
 
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees()
     {
-
+        _logger.LogInformation("Fetching all employees");
         var employees = await _employeeService.GetAllAsync();
 
         return Ok(employees);

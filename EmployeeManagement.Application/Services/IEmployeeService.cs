@@ -11,6 +11,7 @@ public interface IEmployeeService
     Task<EmployeeDto> CreateAsync(CreateEmployeeDto request);
 
     Task<EmployeeDto?> UpdateAsync(int id, UpdateEmployeeDto request);
+    Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(QueryParameters parameters);
 
     Task<bool> DeleteAsync(int id);
 }

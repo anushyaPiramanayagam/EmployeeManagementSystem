@@ -41,6 +41,18 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchEmployees(
+    [FromQuery] QueryParameters parameters)
+    {
+        _logger.LogInformation(
+            "Searching employees");
+
+        var employees =
+            await _employeeService.GetEmployeesAsync(parameters);
+
+        return Ok(employees);
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateEmployee(

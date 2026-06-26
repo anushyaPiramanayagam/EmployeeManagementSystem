@@ -23,6 +23,13 @@ public class EmployeeService : IEmployeeService
         return _mapper.Map<IEnumerable<EmployeeDto>>(
      employees);
     }
+    public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(QueryParameters parameters)
+    {
+        var employees =
+            await _employeeRepository.GetEmployeesAsync(parameters);
+
+        return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+    }
 
     public async Task<EmployeeDto?> GetByIdAsync(int id)
     {

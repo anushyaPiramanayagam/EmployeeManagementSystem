@@ -1,10 +1,10 @@
-﻿using System;
+﻿using EmployeeManagement.Application.DTOs;
+using EmployeeManagement.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using EmployeeManagement.Domain.Entities;
 
 namespace EmployeeManagement.Application.Interfaces;
 
@@ -19,4 +19,5 @@ public interface IEmployeeRepository
     Task UpdateAsync(Employee employee);
 
     Task DeleteAsync(int id);
+    Task<IEnumerable<Employee>> GetEmployeesAsync(QueryParameters parameters);
 }

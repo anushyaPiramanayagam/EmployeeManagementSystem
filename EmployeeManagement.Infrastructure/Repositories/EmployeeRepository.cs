@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Application.Interfaces;
+﻿using EmployeeManagement.Application.DTOs;
+using EmployeeManagement.Application.Interfaces;
 using EmployeeManagement.Domain.Entities;
 using EmployeeManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,34 @@ public class EmployeeRepository : IEmployeeRepository
 {
     private readonly ApplicationDbContext _context;
 
+    public async Task<IEnumerable<Employee>> GetEmployeesAsync(QueryParameters parameters)
+    {
+        var query = _context.Employees.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.Search))
+        {
+            query = query.Where(x =>
+                x.FirstName.Contains(parameters.Search) ||
+                x.LastName.Contains(parameters.Search));
+        }
+
+        if (!string.IsNullOrWhiteSpace(parameters.SortBy))
+        {
+            if (parameters.SortBy.Equals("FirstName",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                query = parameters.Descending
+                    ? query.OrderByDescending(x => x.FirstName)
+                    : query.OrderBy(x => x.FirstName);
+            }
+        }
+
+        query = query
+            .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+            .Take(parameters.PageSize);
+
+        return await query.ToListAsync();
+    }
     public EmployeeRepository(ApplicationDbContext context)
     {
         _context = context;

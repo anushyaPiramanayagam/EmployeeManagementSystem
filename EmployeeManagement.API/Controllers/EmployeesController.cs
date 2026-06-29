@@ -23,6 +23,7 @@ public class EmployeesController : ControllerBase
     _logger = logger;
 }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees()
     {
@@ -32,6 +33,7 @@ public class EmployeesController : ControllerBase
         return Ok(employees);
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeById(int id)
     {
@@ -42,6 +44,7 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
+    [Authorize]
     [HttpGet("search")]
     public async Task<IActionResult> SearchEmployees(
     [FromQuery] QueryParameters parameters)
@@ -55,6 +58,7 @@ public class EmployeesController : ControllerBase
         return Ok(employees);
     }
 
+    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployee(
       CreateEmployeeDto request)
@@ -64,7 +68,7 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
-
+    [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployee(
      int id,
@@ -78,7 +82,7 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployee(int id)
     {

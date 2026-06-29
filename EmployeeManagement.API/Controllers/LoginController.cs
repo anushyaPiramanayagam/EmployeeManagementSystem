@@ -18,18 +18,40 @@ public class LoginController : ControllerBase
     [HttpPost]
     public IActionResult Login(LoginDto loginDto)
     {
-        if (loginDto.Username == "admin" &&
-            loginDto.Password == "Admin@123")
+        if (loginDto.Username == "admin"
+     && loginDto.Password == "Admin@123")
         {
             var token =
-                _jwtService.GenerateToken(loginDto.Username);
+                _jwtService.GenerateToken(
+                    loginDto.Username,
+                    "Admin");
 
-            return Ok(new
-            {
-                Token = token
-            });
+            return Ok(new { Token = token });
         }
 
-        return Unauthorized("Invalid credentials.");
+        if (loginDto.Username == "hr"
+            && loginDto.Password == "Hr@123")
+        {
+            var token =
+                _jwtService.GenerateToken(
+                    loginDto.Username,
+                    "HR");
+
+            return Ok(new { Token = token });
+        }
+
+        if (loginDto.Username == "employee"
+            && loginDto.Password == "Employee@123")
+        {
+            var token =
+                _jwtService.GenerateToken(
+                    loginDto.Username,
+                    "Employee");
+
+            return Ok(new { Token = token });
+        }
+
+        return Unauthorized();
+
     }
 }

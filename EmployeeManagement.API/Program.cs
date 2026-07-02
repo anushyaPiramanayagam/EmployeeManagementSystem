@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Asp.Versioning;
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File(
@@ -87,6 +88,14 @@ builder.Services.AddAuthentication(
                     Encoding.UTF8.GetBytes(
                         builder.Configuration["Jwt:Key"]!))
         };
+});
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+
+    options.AssumeDefaultVersionWhenUnspecified = true;
+
+    options.ReportApiVersions = true;
 });
 var app = builder.Build();
 

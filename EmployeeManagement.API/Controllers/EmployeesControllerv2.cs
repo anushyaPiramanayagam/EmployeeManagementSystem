@@ -3,7 +3,7 @@ using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.Interfaces;
 using EmployeeManagement.Application.Services;
 using EmployeeManagement.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;   
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace EmployeeManagement.API.Controllers;
 
@@ -11,19 +11,19 @@ namespace EmployeeManagement.API.Controllers;
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [Authorize]
-public class EmployeesController : ControllerBase
+public class EmployeesControllerv2 : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
     private readonly ILogger<EmployeesController> _logger;
-   public EmployeesController(
-    IEmployeeService employeeService,
-    ILogger<EmployeesController> logger)
-{
-    _employeeService =
-        employeeService;
+    public EmployeesControllerv2(
+     IEmployeeService employeeService,
+     ILogger<EmployeesController> logger)
+    {
+        _employeeService =
+            employeeService;
 
-    _logger = logger;
-}
+        _logger = logger;
+    }
 
     [Authorize]
     [HttpGet]
@@ -32,7 +32,13 @@ public class EmployeesController : ControllerBase
         _logger.LogInformation("Fetching all employees");
         var employees = await _employeeService.GetAllAsync();
 
-        return Ok(employees);
+        return Ok(employees.Select(e => new
+        {
+            e.Id,
+            e.FirstName,
+            e.LastName,
+            Version = "2.0"
+        }));
     }
 
     [Authorize]

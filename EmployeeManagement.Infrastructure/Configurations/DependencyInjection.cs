@@ -1,10 +1,11 @@
-﻿using EmployeeManagement.Infrastructure.Persistence;
+﻿using EmployeeManagement.Application.Interfaces;
+using EmployeeManagement.Application.Services;
+using EmployeeManagement.Infrastructure.Persistence;
+using EmployeeManagement.Infrastructure.Repositories;
+using EmployeeManagement.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EmployeeManagement.Application.Interfaces;
-using EmployeeManagement.Infrastructure.Repositories;
-using EmployeeManagement.Application.Services;
 
 namespace EmployeeManagement.Infrastructure.Configurations;
 
@@ -21,9 +22,10 @@ public static class DependencyInjection
 
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<IEmployeeService, EmployeeService>();
-        services.AddScoped(
-    typeof(IGenericRepository<>),
-    typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+        services.AddScoped<
+     EmployeeManagement.Infrastructure.UnitOfWork.IUnitOfWork,
+     EmployeeManagement.Infrastructure.UnitOfWork.UnitOfWork>();
         return services;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using EmployeeManagement.Application.Common;
 using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.Interfaces;
 using EmployeeManagement.Application.Services;
@@ -32,7 +33,12 @@ public class EmployeesController : ControllerBase
         _logger.LogInformation("Fetching all employees");
         var employees = await _employeeService.GetAllAsync();
 
-        return Ok(employees);
+        return Ok(new ApiResponse<IEnumerable<EmployeeDto>>
+  (
+      true,
+      "Employees retrieved successfully.",
+      employees
+  ));
     }
 
     [Authorize]
@@ -44,7 +50,12 @@ public class EmployeesController : ControllerBase
         if (employee == null)
             return NotFound();
 
-        return Ok(employee);
+        return Ok(new ApiResponse<EmployeeDto>
+ (
+     true,
+     "Employee retrieved successfully.",
+     employee
+ ));
     }
     [Authorize]
     [HttpGet("search")]
@@ -68,7 +79,15 @@ public class EmployeesController : ControllerBase
         var employee =
             await _employeeService.CreateAsync(request);
 
-        return Ok(employee);
+        return CreatedAtAction(
+    nameof(GetEmployeeById),
+    new { id = employee.Id },
+    new ApiResponse<EmployeeDto>
+    (
+        true,
+        "Employee created successfully.",
+        employee
+    ));
     }
     [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id}")]
@@ -82,7 +101,12 @@ public class EmployeesController : ControllerBase
         if (employee == null)
             return NotFound();
 
-        return Ok(employee);
+        return Ok(new ApiResponse<string>
+(
+    true,
+    "Employee updated successfully.",
+    null
+));
     }
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
@@ -94,6 +118,11 @@ public class EmployeesController : ControllerBase
         if (!deleted)
             return NotFound();
 
-        return NoContent();
+        return Ok(new ApiResponse<string>
+(
+    true,
+    "Employee deleted successfully.",
+    null
+));
     }
 }

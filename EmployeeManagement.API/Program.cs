@@ -108,6 +108,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 app.UseGlobalExceptionHandling();
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();

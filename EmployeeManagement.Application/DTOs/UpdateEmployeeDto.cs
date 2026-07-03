@@ -25,4 +25,5 @@ public class UpdateEmployeeDto
 
     [Required]
     public int DepartmentId { get; set; }
+    public string? ProfileImage { get; set; }
 }

@@ -21,4 +21,5 @@ public class EmployeeDto
     public string Designation { get; set; } = string.Empty;
 
     public string DepartmentName { get; set; } = string.Empty;
+    public string? ProfileImage { get; set; }
 }

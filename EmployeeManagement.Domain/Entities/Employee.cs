@@ -27,4 +27,5 @@ public class Employee : BaseEntity
     public int DepartmentId { get; set; }
 
     public Department? Department { get; set; }
+    public string? ProfileImage { get; set; }
 }

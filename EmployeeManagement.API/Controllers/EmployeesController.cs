@@ -26,7 +26,7 @@ public class EmployeesController : ControllerBase
     _logger = logger;
 }
 
-    [Authorize]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees()
     {
